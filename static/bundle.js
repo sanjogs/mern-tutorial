@@ -35557,11 +35557,21 @@ var NoMatch = React.createClass({
 	displayName: 'NoMatch',
 
 	render: function () {
-		return React.createElement('h2', null, 'Resource not found');
+		return React.createElement(
+			'h2',
+			null,
+			'Resource not found'
+		);
 	}
 });
 
-ReactDOM.render(React.createElement(Router, { history: browserHistory }, React.createElement(Route, { path: '/bugs', component: BugList }), React.createElement(Redirect, { from: '/', to: '/bugs' }), React.createElement(Route, { path: '*', component: NoMatch })), document.getElementById('main'));
+ReactDOM.render(React.createElement(
+	Router,
+	{ history: browserHistory },
+	React.createElement(Route, { path: '/bugs', component: BugList }),
+	React.createElement(Redirect, { from: '/', to: '/bugs' }),
+	React.createElement(Route, { path: '*', component: NoMatch })
+), document.getElementById('main'));
 
 },{"./buglist.js":237,"react":231,"react-dom":47,"react-router":200}],235:[function(require,module,exports){
 var React = require('react');
@@ -35611,9 +35621,10 @@ var React = require('react');
 var bugfilter = class BugFilter extends React.Component {
 	constructor(props) {
 		super(props);
+		var initFilter = this.props.initFilter;
 		this.state = {
-			status: 'New',
-			priority: 'P1'
+			status: initFilter.status,
+			priority: initFilter.priority
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.priorityChange = this.priorityChange.bind(this);
@@ -35621,11 +35632,11 @@ var bugfilter = class BugFilter extends React.Component {
 	}
 	handleSubmit(e) {
 		e.preventDefault();
+		var filter = {};
+		if (this.state.status) filter.status = this.state.status;
+		if (this.state.priority) filter.prioity = this.state.priority;
 
-		this.props.onSearch({
-			status: this.state.status,
-			priority: this.state.priority
-		});
+		this.props.onSearch(filter);
 	}
 	priorityChange(evt) {
 		this.setState({
@@ -35638,53 +35649,7 @@ var bugfilter = class BugFilter extends React.Component {
 		});
 	}
 	render() {
-		return React.createElement(
-			'div',
-			{ className: 'bug-filter' },
-			React.createElement(
-				'select',
-				{ name: 'priority', value: this.state.priority, onChange: this.priorityChange },
-				React.createElement(
-					'option',
-					{ value: 'P1' },
-					'P1'
-				),
-				React.createElement(
-					'option',
-					{ value: 'P2' },
-					'P2'
-				),
-				React.createElement(
-					'option',
-					{ value: 'P3' },
-					'P3'
-				)
-			),
-			React.createElement(
-				'select',
-				{ name: 'status', value: this.state.status, onChange: this.statusChange },
-				React.createElement(
-					'option',
-					{ value: 'New' },
-					'New'
-				),
-				React.createElement(
-					'option',
-					{ value: 'Open' },
-					'Open'
-				),
-				React.createElement(
-					'option',
-					{ value: 'Closed' },
-					'Closed'
-				)
-			),
-			React.createElement(
-				'button',
-				{ type: 'submit', onClick: this.handleSubmit },
-				'Search'
-			)
-		);
+		return React.createElement('div', { className: 'bug-filter' }, React.createElement('select', { name: 'priority', value: this.state.priority, onChange: this.priorityChange }, React.createElement('option', { value: 'P1' }, 'P1'), React.createElement('option', { value: 'P2' }, 'P2'), React.createElement('option', { value: 'P3' }, 'P3')), React.createElement('select', { name: 'status', value: this.state.status, onChange: this.statusChange }, React.createElement('option', { value: 'New' }, 'New'), React.createElement('option', { value: 'Open' }, 'Open'), React.createElement('option', { value: 'Closed' }, 'Closed')), React.createElement('button', { type: 'submit', onClick: this.handleSubmit }, 'Search'));
 	}
 };
 
@@ -35699,35 +35664,7 @@ var $ = require('jquery');
 class BugRow extends React.Component {
 
   render() {
-    return React.createElement(
-      'tr',
-      { className: 'bug-row' },
-      React.createElement(
-        'td',
-        null,
-        this.props.bug.id
-      ),
-      React.createElement(
-        'td',
-        null,
-        this.props.bug.status
-      ),
-      React.createElement(
-        'td',
-        null,
-        this.props.bug.priority
-      ),
-      React.createElement(
-        'td',
-        null,
-        this.props.bug.owner
-      ),
-      React.createElement(
-        'td',
-        null,
-        this.props.bug.title
-      )
-    );
+    return React.createElement('tr', { className: 'bug-row' }, React.createElement('td', null, this.props.bug.id), React.createElement('td', null, this.props.bug.status), React.createElement('td', null, this.props.bug.priority), React.createElement('td', null, this.props.bug.owner), React.createElement('td', null, this.props.bug.title));
   }
 }
 class BugTable extends React.Component {
@@ -35736,52 +35673,7 @@ class BugTable extends React.Component {
     var bugrow = this.props.bugs.map(bug => {
       return React.createElement(BugRow, { key: bug.id, bug: bug });
     });
-    return React.createElement(
-      'div',
-      { className: 'bug-table' },
-      React.createElement(
-        'table',
-        null,
-        React.createElement(
-          'thead',
-          null,
-          React.createElement(
-            'tr',
-            { className: 'bug-row' },
-            React.createElement(
-              'th',
-              null,
-              'ID'
-            ),
-            React.createElement(
-              'th',
-              null,
-              'Status'
-            ),
-            React.createElement(
-              'th',
-              null,
-              'Priority'
-            ),
-            React.createElement(
-              'th',
-              null,
-              'Owner'
-            ),
-            React.createElement(
-              'th',
-              null,
-              'Title'
-            )
-          )
-        ),
-        React.createElement(
-          'tbody',
-          null,
-          bugrow
-        )
-      )
-    );
+    return React.createElement('div', { className: 'bug-table' }, React.createElement('table', null, React.createElement('thead', null, React.createElement('tr', { className: 'bug-row' }, React.createElement('th', null, 'ID'), React.createElement('th', null, 'Status'), React.createElement('th', null, 'Priority'), React.createElement('th', null, 'Owner'), React.createElement('th', null, 'Title'))), React.createElement('tbody', null, bugrow)));
   }
 }
 var buglist = class BugList extends React.Component {
@@ -35793,18 +35685,28 @@ var buglist = class BugList extends React.Component {
   }
 
   loadData(filter) {
-    $.get('/api/bugs', { status: filter.status, priority: filter.priority }, function (data) {
-      this.setState({ bugs: [] });
+    $.get('/api/bugs', {
+      status: filter.status,
+      priority: filter.priority
+    }, function (data) {
+      this.setState({
+        bugs: []
+      });
       if (data) {
         this.setState({
           bugs: data
-
         });
       }
     }.bind(this));
   }
+  changeFilter(filter) {
+    this.props.router.push({
+      search: '?' + $.param(filter)
+    });
+  }
+  componentDidUpdate() {}
   componentDidMount() {
-    this.loadData({});
+    this.loadData(this.props.location.query);
   }
 
   addBug(bug) {
@@ -35821,18 +35723,7 @@ var buglist = class BugList extends React.Component {
 
   render() {
 
-    return React.createElement(
-      'div',
-      { id: 'bug-list' },
-      React.createElement(
-        'h1',
-        null,
-        'Bug Tracker '
-      ),
-      React.createElement(BugFilter, { onSearch: filter => this.loadData(filter) }),
-      React.createElement(BugTable, { bugs: this.state.bugs }),
-      React.createElement(BugAdd, { onBugAdd: bug => this.addBug(bug) })
-    );
+    return React.createElement('div', { id: 'bug-list' }, React.createElement('h1', null, 'Bug Tracker '), React.createElement(BugFilter, { onSearch: filter => this.changeFilter(filter), initFilter: this.props.location.query }), React.createElement(BugTable, { bugs: this.state.bugs }), React.createElement(BugAdd, { onBugAdd: bug => this.addBug(bug) }));
   }
 };
 
