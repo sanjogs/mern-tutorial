@@ -12,8 +12,8 @@ var bugadd=class BugAdd extends React.Component {
 		this.props.onBugAdd({
 			owner: form.owner.value,
 			title: form.title.value,
-			status: 'New',
-			priority: 'P1'
+			status: 'Closed',
+			priority: 'P3'
 		});
 		// clear the form for the next input
 		form.owner.value = "";

@@ -17,9 +17,9 @@ var NoMatch = React.createClass({
 
 ReactDOM.render((
 	<Router history={ browserHistory }>
-   <Route path="/bugs" component={ BugList } />
-   <Redirect from="/" to="/bugs" />
-   <Route path='*' component={ NoMatch } />
- </Router>
+ 	  <Route path="/bugs" component={ BugList } />
+ 	  <Redirect from="/" to="/bugs" />
+ 	  <Route path='*' component={ NoMatch } />
+ 	</Router>
 	),
 	document.getElementById('main'));

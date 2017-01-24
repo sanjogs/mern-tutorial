@@ -49,16 +49,37 @@ app.route('/api/bugs')
 			bug.save((err, doc) => {
 				if (err) res.status(500).send('cannot save bug to db');
 				res.json(doc);
-
 			});
+		});
+	});
+app.route('/api/bugs/:id')
+	.get((req, res) => {
+		Bug.findOne({
+			id: req.params.id
+		}, (err, doc) => {
+			if (err) res.status(500).send('something went wrong while trying to fetch data');
 
-		})
+			if (doc) {
+				res.json(doc);
+			}
+		});
+	})
+	.put((req, res) => {
+		Bug.update({
+			id: req.params.id
+		}, req.body.bug, function(err, doc) {
+			if (err) res.status(500).send('something went wrong while updating');
+
+			if (doc) {
+				res.json(doc);
+			}
+		});
 
 	});
 
 //redirect every other request to client app
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'static', 'index.html'))
+	res.sendFile(path.resolve(__dirname, 'static', 'index.html'));
 });
 
 app.listen(3000, () => {
