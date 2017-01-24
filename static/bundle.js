@@ -35626,15 +35626,28 @@ var bugfilter = class BugFilter extends React.Component {
 			status: initFilter.status,
 			priority: initFilter.priority
 		};
+		console.log('setting initial state on constructor, filter');
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.priorityChange = this.priorityChange.bind(this);
 		this.statusChange = this.statusChange.bind(this);
 	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.initFilter.status == this.state.status && nextProps.initFilter.priority == this.state.priority) {
+			console.log('no changes on componentWillReceiveProps');
+			return;
+		}
+		this.setState({
+			status: nextProps.initFilter.status,
+			priority: nextProps.initFilter.priority
+		});
+		console.log('refreshing state, on componentWillReceiveProps');
+	}
+
 	handleSubmit(e) {
 		e.preventDefault();
 		var filter = {};
 		if (this.state.status) filter.status = this.state.status;
-		if (this.state.priority) filter.prioity = this.state.priority;
+		if (this.state.priority) filter.priority = this.state.priority;
 
 		this.props.onSearch(filter);
 	}
@@ -35685,10 +35698,11 @@ var buglist = class BugList extends React.Component {
   }
 
   loadData(filter) {
-    $.get('/api/bugs', {
-      status: filter.status,
-      priority: filter.priority
-    }, function (data) {
+    var filter = {
+      status: this.props.location.query.status,
+      priority: this.props.location.query.priority
+    };
+    $.get('/api/bugs', filter, function (data) {
       this.setState({
         bugs: []
       });
@@ -35703,10 +35717,19 @@ var buglist = class BugList extends React.Component {
     this.props.router.push({
       search: '?' + $.param(filter)
     });
+    console.log('filter changed');
   }
-  componentDidUpdate() {}
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.query.status == this.props.location.query.status && prevProps.location.query.priority == this.props.location.query.priority) {
+      console.log('no changes on componentdidupdate');
+      return;
+    }
+    this.loadData();
+    console.log('bug list updated, on componentDidUpdate');
+  }
   componentDidMount() {
-    this.loadData(this.props.location.query);
+    this.loadData();
+    console.log('bug list updated, on componentDidMount');
   }
 
   addBug(bug) {

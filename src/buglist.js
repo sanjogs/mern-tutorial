@@ -68,10 +68,11 @@ var buglist = class BugList extends React.Component {
   }
 
   loadData(filter) {
-    $.get('/api/bugs', {
-      status: filter.status,
-      priority: filter.priority
-    }, function(data) {
+    var filter = {
+      status: this.props.location.query.status,
+      priority: this.props.location.query.priority
+    };
+    $.get('/api/bugs', filter, function(data) {
       this.setState({
         bugs: []
       })
@@ -86,10 +87,21 @@ var buglist = class BugList extends React.Component {
     this.props.router.push({
       search: '?' + $.param(filter)
     });
-    this.loadData(filter);
+  console.log('filter changed');
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.query.status == this.props.location.query.status &&
+      prevProps.location.query.priority == this.props.location.query.priority) {
+      console.log('no changes on componentdidupdate');
+      return;
+    }
+    this.loadData();
+    console.log('bug list updated, on componentDidUpdate');
   }
   componentDidMount() {
-    this.loadData(this.props.location.query);
+    this.loadData();
+    console.log('bug list updated, on componentDidMount');
+    
   }
 
   addBug(bug) {

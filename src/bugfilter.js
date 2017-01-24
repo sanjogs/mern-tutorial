@@ -8,17 +8,32 @@ var bugfilter = class BugFilter extends React.Component {
 			status: initFilter.status,
 			priority: initFilter.priority
 		};
+		console.log('setting initial state on constructor, filter');
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.priorityChange = this.priorityChange.bind(this);
 		this.statusChange = this.statusChange.bind(this);
 	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.initFilter.status==this.state.status && nextProps.initFilter.priority==this.state.priority)
+		{
+			console.log('no changes on componentWillReceiveProps');
+			return;
+		}
+		this.setState({
+			status: nextProps.initFilter.status,
+			priority: nextProps.initFilter.priority
+		});
+		console.log('refreshing state, on componentWillReceiveProps');
+		
+	}
+
 	handleSubmit(e) {
 		e.preventDefault();
 		var filter = {};
 		if (this.state.status)
 			filter.status = this.state.status;
 		if (this.state.priority)
-			filter.prioity = this.state.priority;
+			filter.priority = this.state.priority;
 
 		this.props.onSearch(filter);
 	}
