@@ -2,13 +2,15 @@ var React = require('react');
 var BugFilter = require('./bugfilter.js');
 var BugAdd = require('./bugadd.js');
 var $ = require('jquery');
+var Link=require('react-router').Link;
 
 class BugRow extends React.Component {
 
   render() {
     return (<tr className='bug-row'>
               <td>
-                { this.props.bug.id }
+              <Link to={`/bugs/${this.props.bug.id}`}>{ this.props.bug.id }</Link>
+                
               </td>
               <td>
                 { this.props.bug.status }

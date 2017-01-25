@@ -65,9 +65,10 @@ app.route('/api/bugs/:id')
 		});
 	})
 	.put((req, res) => {
+
 		Bug.update({
 			id: req.params.id
-		}, req.body.bug, function(err, doc) {
+		}, req.body, function(err, doc) {
 			if (err) res.status(500).send('something went wrong while updating');
 
 			if (doc) {
