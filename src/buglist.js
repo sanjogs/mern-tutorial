@@ -3,6 +3,9 @@ var BugFilter = require('./bugfilter.js');
 var BugAdd = require('./bugadd.js');
 var $ = require('jquery');
 var Link=require('react-router').Link;
+var Grid  = require('react-bootstrap/lib/Grid');
+var Panel  = require('react-bootstrap/lib/Panel');
+var Table  = require('react-bootstrap/lib/Table');
 
 class BugRow extends React.Component {
 
@@ -34,7 +37,7 @@ class BugTable extends React.Component {
       return <BugRow key={ bug.id } bug={ bug } />
     });
     return (<div className='bug-table'>
-              <table>
+              <Table bordered condensed striped hover>
                 <thead>
                   <tr className='bug-row'>
                     <th>
@@ -57,7 +60,7 @@ class BugTable extends React.Component {
                 <tbody>
                   { bugrow }
                 </tbody>
-              </table>
+              </Table>
             </div>);
   }
 }
@@ -121,12 +124,12 @@ var buglist = class BugList extends React.Component {
 
   render() {
 
-    return <div id='bug-list'>
+    return <Grid id='bug-list'>
              <h1>Bug Tracker </h1>
              <BugFilter onSearch={ (filter) => this.changeFilter(filter) } initFilter={ this.props.location.query } />
              <BugTable bugs={ this.state.bugs } />
              <BugAdd onBugAdd={ (bug) => this.addBug(bug) } />
-           </div>;
+           </Grid>;
   }
 }
 

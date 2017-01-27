@@ -1,5 +1,19 @@
 var React=require('react');
+var FormGroup  = require('react-bootstrap/lib/FormGroup');
+var FormControl  = require('react-bootstrap/lib/FormControl');
+var ControlLabel  = require('react-bootstrap/lib/ControlLabel');
+var HelpBlock  = require('react-bootstrap/lib/HelpBlock');
+var Button  = require('react-bootstrap/lib/Button');
 
+function FieldGroup({ id, label, help, props }) {
+  return (
+    <FormGroup controlId={id}>
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...props} />
+      {help && <HelpBlock>{help}</HelpBlock>}
+    </FormGroup>
+  );
+}
 
 var bugadd=class BugAdd extends React.Component {
 	constructor(props) {
@@ -22,9 +36,19 @@ var bugadd=class BugAdd extends React.Component {
 	render() {
 		return <div className='bug-add'>
            <form name='bugAdd'>
-             <input type='text' name='title' placeholder='bug title' />
-             <input type='text' name='owner' placeholder='owner' />
-             <button type='submit' onClick={ this.handleSubmit }>Add</button>
+		   <FieldGroup
+			id="title" name="title"
+			type="text"
+			label="Title"
+			placeholder="Enter title"
+			/>
+			<FieldGroup
+			id="owner" name="owner"
+			type="text"
+			label="Owner"
+			placeholder="Enter owner"
+			/>
+             <Button bsStyle="success" onClick={ this.handleSubmit }>Add</Button>
            </form>
          </div>;
 	}
